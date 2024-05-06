@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multi_provider/providers/cart.dart';
 import 'package:provider/provider.dart';
 
 import '../screens/product_detail_screen.dart';
@@ -28,13 +29,30 @@ class ProductItem extends StatelessWidget {
             productData.title,
             textAlign: TextAlign.center,
           ),
-          trailing: IconButton(
+          trailing: Consumer<Cart>(builder: (context, cart, child) => IconButton(
             icon: const Icon(
               Icons.shopping_cart,
             ),
-            onPressed: () {},
+            onPressed: () {
+              cart.addCart(id: productData.id, title: productData.title, price: productData.price);
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Text(
+                    'Item Berhasil Add Ke Cart!',
+                  ),
+                  duration: const Duration(seconds: 3),
+                  action: SnackBarAction(
+                    label: 'Batal',
+                    onPressed: () {
+                      cart.removeSingleItem(productData.id);
+                    },
+                  ),
+                ),
+              );
+            },
             color: Theme.of(context).colorScheme.secondary,
-          ),
+          ),)
         ),
         child: GestureDetector(
           onTap: () {
