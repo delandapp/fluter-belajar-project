@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:
@@ -17,3 +18,14 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  # Daftar Font Assets
+  fonts:
+  - family: Lato
+    fonts:
+      - asset: assets/fonts/Lato-Regular.ttf
+      - asset: assets/fonts/Lato-Bold.ttf
+        weight: 700
+  - family: Anton
+    fonts:
+      - asset: assets/fonts/Anton-Regular.ttf
+
