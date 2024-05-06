@@ -31,3 +31,17 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+class ScreenSementara extends StatelessWidget {
+  ScreenSementara({super.key});
+  final List<Text> myList = List.generate(100, (i) => Text('Item ${i+1}', style: const TextStyle(fontSize: 35),));
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: ListView(
+      children: [Container(width: 100,height: 100,color: Colors.green,),...myList,Container(width: 100,height: 100,color: Colors.amber,)],
+    ),
+    );
+  }
+}

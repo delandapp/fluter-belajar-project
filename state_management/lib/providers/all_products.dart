@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:state_management/models/product.dart';
+import 'package:state_management/providers/product.dart';
 
 class Products with ChangeNotifier {
   // Kita buat variabel _allProducts (Private Variabel)
@@ -19,6 +19,12 @@ class Products with ChangeNotifier {
   );
 
   List<Product> get allProducts {
+    // ... adalah spread collection
+    /**
+     * var y = [5,6,8]
+     * var x = [2,3]
+     * x = [2,...y,3]
+     */
     return [..._allProducts];
   }
 
