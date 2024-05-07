@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/player.dart';
+import 'package:dio/dio.dart';
 
 class Players with ChangeNotifier {
   // inisiasi agar mengambil data saat pertama kali masuk
@@ -101,12 +102,13 @@ class Players with ChangeNotifier {
     });
   }
 
-  Future<void> editPlayer(
-      String id, String name, String position, String image) {
+  editPlayer(
+      String id, String name, String position, String image) async {
     Player selectPlayer = _allPlayer.firstWhere((element) => element.id == id);
     Uri url = Uri.parse(
-        "https://belajarfirebaseflutter-c8c4d-default-rtdb.asia-southeast1.firebasedatabase.app/player/$id.json");
-    return http
+        "https://belajarfirebaseflutter-c8c4d-default-rtdb.asia-southeast1.firebasedatabase.app/player/$id");
+         try {
+      final response = await http
         .patch(
       url,
       body: json.encode(
@@ -116,16 +118,22 @@ class Players with ChangeNotifier {
           "imageUrl": image,
         },
       ),
-    )
-        .then(
-      (response) {
+    );
+      if (response.statusCode.toInt() >= 200 &&
+          response.statusCode.toInt() < 300) {
         selectPlayer.name = name;
         selectPlayer.position = position;
         selectPlayer.imageUrl = image;
         print(_allPlayer);
         notifyListeners();
-      },
-    );
+      } else {
+        // Ini akan melempar ke catch error di bawah
+        throw (response.statusCode.toString());
+      }
+    } on Exception catch (e) {
+      // print(e.response!.statusCode!);
+      throw (e);
+    }
   }
 
   Future<void> deletePlayer(String id) {

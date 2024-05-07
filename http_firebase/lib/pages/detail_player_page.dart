@@ -17,6 +17,31 @@ class DetailPlayer extends StatelessWidget {
         TextEditingController(text: selectPLayer.name);
     final TextEditingController positionController =
         TextEditingController(text: selectPLayer.position);
+    final void Function() editPlayer = () {
+      players
+          .editPlayer(
+            playerId,
+            nameController.text,
+            positionController.text,
+            imageController.text,
+          )
+          .then((_) {Navigator.pop(context); print("Ini Then");})
+          .catchError(
+            (error) async { await showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text("Error"),
+                content: Text(error.toString()),
+                actions: [
+                  TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text("OK"))
+                ],
+              ),
+            );print("Ini Catch");}
+          );
+      ;
+    };
     return Scaffold(
       appBar: AppBar(
         title: const Text("DETAIL PLAYER"),
@@ -54,43 +79,17 @@ class DetailPlayer extends StatelessWidget {
                 controller: positionController,
               ),
               TextFormField(
-                autocorrect: false,
-                decoration: const InputDecoration(labelText: "Image URL"),
-                textInputAction: TextInputAction.done,
-                controller: imageController,
-                onEditingComplete: () {
-                  players.editPlayer(
-                    playerId,
-                    nameController.text,
-                    positionController.text,
-                    imageController.text,
-                  );
-                  Navigator.pop(context);
-                },
-              ),
+                  autocorrect: false,
+                  decoration: const InputDecoration(labelText: "Image URL"),
+                  textInputAction: TextInputAction.done,
+                  controller: imageController,
+                  onEditingComplete: editPlayer),
               const SizedBox(height: 50),
               Container(
                 width: double.infinity,
                 alignment: Alignment.centerRight,
                 child: OutlinedButton(
-                  onPressed: () {
-                    players
-                        .editPlayer(
-                          playerId,
-                          nameController.text,
-                          positionController.text,
-                          imageController.text,
-                        )
-                        .then(
-                          (_) => ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Berhasil diubah"),
-                              duration: Duration(seconds: 2),
-                            ),
-                          ),
-                        );
-                    Navigator.pop(context);
-                  },
+                  onPressed: editPlayer,
                   child: const Text(
                     "Edit",
                     style: TextStyle(
