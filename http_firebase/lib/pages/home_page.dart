@@ -10,7 +10,7 @@ import '../providers/players.dart';
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final allPlayerProvider = Provider.of<Players>(context);
+    var allPlayerProvider = Provider.of<Players>(context);
     return Scaffold(
       appBar: AppBar(
         title: const  Text("ALL PLAYERS"),
