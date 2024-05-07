@@ -14,7 +14,7 @@ class Players with ChangeNotifier {
   Player selectById(String id) =>
       _allPlayer.firstWhere((element) => element.id == id);
 
- // Kenapa harus future? agar bisa menggunakan then dibagian add_player Navigator.pop(context)
+  // Kenapa harus future? agar bisa menggunakan then dibagian add_player Navigator.pop(context)
   Future<void> addPlayer(String name, String position, String image) {
     DateTime datetimeNow = DateTime.now();
     // jika kita ingin menentukan struktur harus dibagian akhir url misal player/data.json atau player/data/detail.json
@@ -35,7 +35,8 @@ class Players with ChangeNotifier {
     )
         .then(
       (response) {
-        print(json.decode(response.body)["name"]); // untuk mendapatkan string acak
+        print(json
+            .decode(response.body)["name"]); // untuk mendapatkan string acak
         _allPlayer.add(
           Player(
             id: json.decode(response.body)["name"].toString(),
@@ -59,7 +60,7 @@ class Players with ChangeNotifier {
     selectPlayer.imageUrl = image;
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         content: Text("Berhasil diubah"),
         duration: Duration(seconds: 2),
       ),
@@ -67,14 +68,21 @@ class Players with ChangeNotifier {
     notifyListeners();
   }
 
-  void deletePlayer(String id, BuildContext context) {
-    _allPlayer.removeWhere((element) => element.id == id);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Berhasil dihapus"),
-        duration: Duration(milliseconds: 500),
-      ),
+  Future <void> deletePlayer(String id) {
+    Uri url = Uri.parse(
+        "https://belajarfirebaseflutter-c8c4d-default-rtdb.asia-southeast1.firebasedatabase.app/player/$id.json");
+    return http
+        .delete(
+      url,
+    )
+        .then(
+      (response) {
+
+        _allPlayer.removeWhere((element) => element.id == id);
+        print(_allPlayer);
+        notifyListeners();
+      },
     );
-    notifyListeners();
+    
   }
 }

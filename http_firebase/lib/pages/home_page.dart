@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
     final allPlayerProvider = Provider.of<Players>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("ALL PLAYERS"),
+        title: const  Text("ALL PLAYERS"),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
@@ -29,16 +29,16 @@ class HomePage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "No Data",
                     style: TextStyle(fontSize: 25),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   OutlinedButton(
                     onPressed: () {
                       Navigator.pushNamed(context, AddPlayer.routeName);
                     },
-                    child: Text(
+                    child: const Text(
                       "Add Player",
                       style: TextStyle(fontSize: 20),
                     ),
@@ -72,9 +72,17 @@ class HomePage extends StatelessWidget {
                   ),
                   trailing: IconButton(
                     onPressed: () {
-                      allPlayerProvider.deletePlayer(id, context);
+                      allPlayerProvider.deletePlayer(id).then(
+                            (_) =>
+                                ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Berhasil dihapus"),
+                                duration: Duration(milliseconds: 500),
+                              ),
+                            ),
+                          );
                     },
-                    icon: Icon(Icons.delete),
+                    icon: const Icon(Icons.delete),
                   ),
                 );
               },
