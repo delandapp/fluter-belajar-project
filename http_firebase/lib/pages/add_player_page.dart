@@ -34,7 +34,7 @@ class AddPlayer extends StatelessWidget {
                       duration: Duration(seconds: 2),
                     ),
                   );
-                  Navigator.pop(context);
+                  Navigator.pop(context); // ini ditaruh di then agar terjadi ansyncronus proses
                 },
               );
             },
