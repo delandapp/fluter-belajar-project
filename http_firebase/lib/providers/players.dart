@@ -17,7 +17,7 @@ class Players with ChangeNotifier {
  // Kenapa harus future? agar bisa menggunakan then dibagian add_player Navigator.pop(context)
   Future<void> addPlayer(String name, String position, String image) {
     DateTime datetimeNow = DateTime.now();
-
+    // jika kita ingin menentukan struktur harus dibagian akhir url misal player/data.json atau player/data/detail.json
     Uri url = Uri.parse(
         "https://belajarfirebaseflutter-c8c4d-default-rtdb.asia-southeast1.firebasedatabase.app/player.json");
     return http
