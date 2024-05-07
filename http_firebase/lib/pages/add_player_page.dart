@@ -62,7 +62,7 @@ class AddPlayer extends StatelessWidget {
               TextFormField(
                 autocorrect: false,
                 decoration: InputDecoration(labelText: "Image URL"),
-                textInputAction: TextInputAction.done,
+                textInputAction: TextInputAction.done, // agar ketika kita menekan tombol done di keyboard otomaris menjalankan code
                 controller: imageController,
                 onEditingComplete: () {
                   players
