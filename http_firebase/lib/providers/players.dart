@@ -14,6 +14,7 @@ class Players with ChangeNotifier {
   Player selectById(String id) =>
       _allPlayer.firstWhere((element) => element.id == id);
 
+ // Kenapa harus future? agar bisa menggunakan then dibagian add_player Navigator.pop(context)
   Future<void> addPlayer(String name, String position, String image) {
     DateTime datetimeNow = DateTime.now();
 
