@@ -12,32 +12,47 @@ class AddPlayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final players = Provider.of<Players>(context, listen: false);
+    final void Function() addPlayer = () {
+      players
+          .addPlayer(
+        nameController.text,
+        positionController.text,
+        imageController.text,
+      )
+          .then(
+        (response) {
+          print("Kembali ke Home & kasih notif snack bar");
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Berhasil ditambahkan"),
+              duration: Duration(seconds: 2),
+            ),
+          );
+          Navigator.pop(
+              context); // ini ditaruh di then agar terjadi ansyncronus proses
+        },
+      ).catchError(
+        (error) async => await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Error"),
+            content: Text(error.toString()),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("OK"))
+            ],
+          ),
+        ),
+      );
+    };
     return Scaffold(
       appBar: AppBar(
         title: Text("ADD PLAYER"),
         actions: [
           IconButton(
             icon: Icon(Icons.save),
-            onPressed: () {
-              players
-                  .addPlayer(
-                nameController.text,
-                positionController.text,
-                imageController.text,
-              )
-                  .then(
-                (response) {
-                  print("Kembali ke Home & kasih notif snack bar");
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Berhasil ditambahkan"),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                  Navigator.pop(context); // ini ditaruh di then agar terjadi ansyncronus proses
-                },
-              );
-            },
+            onPressed: addPlayer,
           ),
         ],
       ),
@@ -62,7 +77,8 @@ class AddPlayer extends StatelessWidget {
               TextFormField(
                 autocorrect: false,
                 decoration: InputDecoration(labelText: "Image URL"),
-                textInputAction: TextInputAction.done, // agar ketika kita menekan tombol done di keyboard otomaris menjalankan code
+                textInputAction: TextInputAction
+                    .done, // agar ketika kita menekan tombol done di keyboard otomaris menjalankan code
                 controller: imageController,
                 onEditingComplete: () {
                   players
@@ -90,26 +106,7 @@ class AddPlayer extends StatelessWidget {
                 width: double.infinity,
                 alignment: Alignment.centerRight,
                 child: OutlinedButton(
-                  onPressed: () {
-                    players
-                        .addPlayer(
-                      nameController.text,
-                      positionController.text,
-                      imageController.text,
-                    )
-                        .then(
-                      (response) {
-                        print("Kembali ke Home & kasih notif snack bar");
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text("Berhasil ditambahkan"),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                        Navigator.pop(context);
-                      },
-                    );
-                  },
+                  onPressed: addPlayer,
                   child: Text(
                     "Submit",
                     style: TextStyle(

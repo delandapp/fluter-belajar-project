@@ -19,26 +19,27 @@ class Players with ChangeNotifier {
       _allPlayer.firstWhere((element) => element.id == id);
 
   // Kenapa harus future? agar bisa menggunakan then dibagian add_player Navigator.pop(context)
-  Future<void> addPlayer(String name, String position, String image) {
+  addPlayer(String name, String position, String image) async {
     DateTime datetimeNow = DateTime.now();
     // jika kita ingin menentukan struktur harus dibagian akhir url misal player/data.json atau player/data/detail.json
     Uri url = Uri.parse(
-        "https://belajarfirebaseflutter-c8c4d-default-rtdb.asia-southeast1.firebasedatabase.app/player.json");
-    return http
-        .post(
-      url,
-      body: json.encode(
-        {
-          // "id": datetimeNow.toString(), (Gaperlu karena firebase otomatis memberi string acak)
-          "name": name,
-          "position": position,
-          "imageUrl": image,
-          "createdAt": datetimeNow.toString(),
-        },
-      ),
-    )
-        .then(
-      (response) {
+        "https://belajarfirebaseflutter-c8c4d-default-rtdb.asia-southeast1.firebasedatabase.app/player");
+    //! Menggunakan (Error Handling)
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode(
+          {
+            // "id": datetimeNow.toString(), (Gaperlu karena firebase otomatis memberi string acak)
+            "name": name,
+            "position": position,
+            "imageUrl": image,
+            "createdAt": datetimeNow.toString(),
+          },
+        ),
+      );
+      if (response.statusCode.toInt() >= 200 &&
+          response.statusCode.toInt() < 300) {
         print(json
             .decode(response.body)["name"]); // untuk mendapatkan string acak
         _allPlayer.add(
@@ -52,24 +53,50 @@ class Players with ChangeNotifier {
         );
 
         notifyListeners();
-      },
-    );
+      } else {
+        // Ini akan melempar ke catch error di bawah
+        throw (response.statusCode.toString());
+      }
+    } catch (e) {
+      throw (e);
+    }
   }
 
-  void getData() {
+  getData() {
     Uri url = Uri.parse(
         "https://belajarfirebaseflutter-c8c4d-default-rtdb.asia-southeast1.firebasedatabase.app/player.json");
     http.get(url).then((response) {
+      //! Menggunakan (Error Handling)
+      if (response.statusCode != 200) {
+        throw Exception('Failed to load data');
+      }
       final data = json.decode(response.body) as Map<String, dynamic>;
-      _allPlayer = data.entries.map((e) {
-        return Player(
-          id: e.key,
-          name: e.value["name"],
-          position: e.value["position"],
-          imageUrl: e.value["imageUrl"],
-          createdAt: DateTime.parse(e.value["createdAt"]),
-        );
-      }).toList();
+
+      //! kita bisa menggunakan entres.map dan juga forEach
+      // _allPlayer = data.entries.map((e) {
+      //   return Player(
+      //     id: e.key,
+      //     name: e.value["name"],
+      //     position: e.value["position"],
+      //     imageUrl: e.value["imageUrl"],
+      //     createdAt: DateTime.parse(e.value["createdAt"]),
+      //   );
+      // }).toList();
+      //! kita bisa menggunakan forEach
+      data.forEach(
+        (key, value) {
+          _allPlayer.add(
+            Player(
+              id: key,
+              name: value["name"],
+              position: value["position"],
+              imageUrl: value["imageUrl"],
+              createdAt: DateTime.parse(value["createdAt"]),
+            ),
+          );
+        },
+      );
+
       notifyListeners();
     });
   }
