@@ -13,6 +13,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: ConterPage(),
+      initialRoute: '/counter-page',
       routes: {
         ConterPage.nameRoute : (context) => ConterPage(),
         OtherPage.nameRoute : (context) => const OtherPage(),
