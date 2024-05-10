@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import './providers/colors.dart';
+import './pages/home_page.dart';
+import './pages/add_color_page.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(MyApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
+    return ChangeNotifierProvider(
+      create: (context) => MultiColor(),
+      builder: (context, child) => MaterialApp(
+        home: HomePage(),
+        routes: {
+          HomePage.routeName: (ctx) => HomePage(),
+          AddColorPage.routeName: (ctx) => AddColorPage(),
+        },
       ),
     );
   }
