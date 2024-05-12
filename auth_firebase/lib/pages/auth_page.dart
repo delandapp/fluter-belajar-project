@@ -38,14 +38,31 @@ class _LoginPageState extends State<LoginPage> {
     return Future.delayed(loginTime).then((value) => null);
   }
 
-  Future<String?> _signupUser(LoginData data) {
+  Future<String?> _signupUser(LoginData data) async{
     final auth = Provider.of<Auth>(context, listen: false);
+    String? error;
 
-    auth.signUp(data.name, data.password);
+    await auth.signUp(data.name, data.password).then((response) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Berhasil Registrasi"),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      // Navigator.pop(context);
+    }).catchError(
+      (err) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(err.toString()),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+        return error = err.toString();
+      },
+    );
     debugPrint('Signup Name: ${data.name}, Password: ${data.password}');
-    return Future.delayed(loginTime).then((_) {
-      return null;
-    });
+    return Future.delayed(loginTime).then((value) => error);
   }
 
   Future<String> _recoverPassword(String name) {
@@ -66,9 +83,11 @@ class _LoginPageState extends State<LoginPage> {
       onLogin: _authUserSignIn,
       onSignup: _signupUser,
       onSubmitAnimationCompleted: () {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => HomePage(),
-        ));
+        print("Test Woy Anjing");
+        Provider.of<Auth>(context, listen: false).tempData();
+        // Navigator.of(context).pushReplacement(MaterialPageRoute(
+        //   builder: (context) => HomePage(),
+        // ));
       },
       onRecoverPassword: _recoverPassword,
     );

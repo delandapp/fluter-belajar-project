@@ -9,13 +9,21 @@ import '../models/product.dart';
 class Products with ChangeNotifier {
   final String urlMaster = "https://authfirebase-277f5-default-rtdb.asia-southeast1.firebasedatabase.app/";
 
+  String? token;
+
   List<Product> _allProduct = [];
 
   List<Product> get allProduct => _allProduct;
 
+  void updateData(tokenData) {
+    token = tokenData;
+    notifyListeners();
+  }
+
   Future<void> addProduct(String title, String price) async {
+    // Tambahkan ?auth=$token untuk membuat autentikasi dengan firebase
     Uri url = Uri.parse(
-        "${urlMaster}products.json");
+        "${urlMaster}products.json?auth=$token");
     DateTime dateNow = DateTime.now();
     try {
       var response = await http.post(
@@ -49,7 +57,7 @@ class Products with ChangeNotifier {
 
   void editProduct(String id, String title, String price) async {
     Uri url = Uri.parse(
-        "${urlMaster}products/$id.json");
+        "${urlMaster}products/$id.json?auth=$token");
     DateTime date = DateTime.now();
     try {
       var response = await http.patch(
@@ -77,7 +85,7 @@ class Products with ChangeNotifier {
 
   void deleteProduct(String id) async {
     Uri url = Uri.parse(
-        "${urlMaster}products/$id.json");
+        "${urlMaster}products/$id.json?auth=$token");
 
     try {
       var response = await http.delete(url);
