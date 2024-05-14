@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:theme/pages/text_pages.dart';
+import 'package:theme/pages/themedata_page.dart';
+import 'package:theme/theme/text_theme.dart';
 
 void main() {
   runApp(const MainApp());
@@ -18,7 +21,7 @@ class MainApp extends StatelessWidget {
           // ! Lebih padat
           // visualDensity: VisualDensity.compact
           // visualDensity: VisualDensity.comfortable
-          visualDensity: VisualDensity(horizontal: 4, vertical: 4),
+          visualDensity: const VisualDensity(horizontal: 4, vertical: 4),
           // ! Agar thema warna bisa berubah sesuai warna kita (Material Colors buka 0xff)
           // primarySwatch: Colors.amber,
           
@@ -38,11 +41,8 @@ class MainApp extends StatelessWidget {
             },
           ),
           primaryColor: Colors.amber,
-          textTheme: TextTheme(
-            bodyMedium: TextStyle(color: Colors.yellow),
-            displayMedium: TextStyle(color: Colors.red),
-          ),
-          appBarTheme: AppBarTheme(
+          textTheme: textTheme,
+          appBarTheme: const AppBarTheme(
             titleTextStyle: TextStyle(
               color: Colors.blue,
               fontSize: 30.0,
@@ -52,42 +52,11 @@ class MainApp extends StatelessWidget {
           // appBarTheme: AppBarTheme(
           //   color: Colors.blueGrey
           // )
+          
         ),
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-          appBar: AppBar(
-            title: Text('Thema Data'),
-            centerTitle: true,
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {},
-            child: Icon(Icons.add),
-          ),
-          body: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Muhammad Deland Arjuna Putra',
-                  style: TextStyle(fontSize: 20),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Yogha Irgi Kurniawan',
-                  style: TextStyle(fontSize: 17),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(onPressed: () {}, child: Text('Submit ME')),
-              ],
-            ),
-          )),
+      home: const LoremIpsumApp(),
     );
   }
 }
+
