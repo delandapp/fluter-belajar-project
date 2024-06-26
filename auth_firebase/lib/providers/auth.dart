@@ -65,7 +65,7 @@ class Auth with ChangeNotifier {
     }
   }
 
-  void signIn(String name, String password) async {
+  signIn(String name, String password) async {
     //! Link Dokumentasi
     // https://firebase.google.com/docs/reference/rest/auth?hl=id
     //! key project berasal dari firebase project setting
